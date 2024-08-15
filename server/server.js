@@ -38,7 +38,9 @@ server.post('/api/process-text', async (req, res) => {
             }
         }
         
-        // TO-DO: append and replace the text 
+        // reame and replace the text 
+        const renameWord = "foo" + mostRepeatedWord.concat("bar")
+        const modifiedText = uploadedFileContent.replaceAll(mostRepeatedWord, renameWord)
   
-  res.json(mostRepeatedWord)   
+  res.json(modifiedText)   
   })
