@@ -22,11 +22,17 @@ server.post('/api/process-text', async (req, res) => {
     const uploadedFileContent = req.body.text
     
     // Split the text with new line, space,feed, tab, carriage return    
-    const words = uploadedFileContent.split(/[\n\s\r\t\f]+/).map(item => item.trim());
-        
+    const words = uploadedFileContent        
+        .split(/[\n\s\r\t\f]+/)
+        .map(item => item.trim());
+    
+    const removePunctuation = str => str.replace(/[^\w\s]|_/g, '');
+    const cleanedArray = words.map(removePunctuation);
+   
     // word count for every occurrence
     const wordCount = {};
-    for (const word of words) {
+    for (const word of cleanedArray) {
+        //console.log(word)
         if (word) { 
             wordCount[word] = (wordCount[word] || 0) + 1;
         }
@@ -52,7 +58,7 @@ server.post('/api/process-text', async (req, res) => {
             if (modifiedText == '') {
                 modifiedText = uploadedFileContent
             }
-            
+        console.log (mostRepeatedWords[index],maxCount) 
         const renameWord = "foo" + mostRepeatedWords[index].concat("bar")
         modifiedText = modifiedText.replaceAll(mostRepeatedWords[index], renameWord)    
         }        
