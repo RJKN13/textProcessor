@@ -19,42 +19,44 @@ server.listen(port, () => {
 })
 
 server.post('/api/process-text', async (req, res) => {
-  //console.log(req.body)
     const uploadedFileContent = req.body.text
-  
-        // change the text to lowercase & replace special characters
-        const words = uploadedFileContent
-            .toLowerCase()           
-            .replace(/[^\w\ ]/g, '') 
-            //.replace(/[_\w\ ]/g, '') 
-            .split(/\ +/);           
-
-        // word count for every occurrence
-        const wordCount = {};
-        for (const word of words) {
-            if (word) { 
-                wordCount[word] = (wordCount[word] || 0) + 1;
-            }
-        }
-
-        // find the most repeated word
-        let maxCount = 0;
-        let mostRepeatedWord = '';
-        for (const word in wordCount) {
-            if (wordCount[word] > maxCount) {
-                maxCount = wordCount[word];
-                mostRepeatedWord = word;
-            }
-        }
+    
+    // Split the text with new line, space,feed, tab, carriage return    
+    const words = uploadedFileContent.split(/[\n\s\r\t\f]+/).map(item => item.trim());
         
-        // rename and replace the text 
-        //console.log("What is the most repeated word?" + mostRepeatedWord)
-        let modifiedText = ''
-        if (mostRepeatedWord != '') {
-            const renameWord = "foo" + mostRepeatedWord.concat("bar")
-            modifiedText = uploadedFileContent.replaceAll(mostRepeatedWord, renameWord)
+    // word count for every occurrence
+    const wordCount = {};
+    for (const word of words) {
+        if (word) { 
+            wordCount[word] = (wordCount[word] || 0) + 1;
         }
-        
+    }
+
+    // find the most repeated word and add to list
+    let maxCount = 0;
+   let mostRepeatedWords = [];
+
+    for (let word in wordCount) {
+        if (wordCount[word] > maxCount) {
+            maxCount = wordCount[word];
+            mostRepeatedWords = [word];
+        } else if (wordCount[word] === maxCount) {
+            mostRepeatedWords.push(word);
+        }
+    }
+    
+    // rename and replace the text     
+    let modifiedText = ''
+    if (mostRepeatedWords.length > 0) {
+        for (let index in mostRepeatedWords) {
+            if (modifiedText == '') {
+                modifiedText = uploadedFileContent
+            }
+            
+        const renameWord = "foo" + mostRepeatedWords[index].concat("bar")
+        modifiedText = modifiedText.replaceAll(mostRepeatedWords[index], renameWord)    
+        }        
+    }   
   
   res.send(modifiedText)   
   })

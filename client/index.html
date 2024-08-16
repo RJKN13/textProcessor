@@ -28,7 +28,7 @@
         // callback function after reading the file
         reader.onload = function (e) {
           const fileContent = e.target.result;
-          alert(fileContent)
+          //const content = fileContent.toLowerCase().replace(/[^\w\ ]/g, '')                     
           const data =  {
             text: fileContent
           }
