@@ -26,6 +26,7 @@ server.post('/api/process-text', async (req, res) => {
         const words = uploadedFileContent
             .toLowerCase()           
             .replace(/[^\w\ ]/g, '') 
+            //.replace(/[_\w\ ]/g, '') 
             .split(/\ +/);           
 
         // word count for every occurrence
@@ -46,9 +47,14 @@ server.post('/api/process-text', async (req, res) => {
             }
         }
         
-        // reame and replace the text 
-        const renameWord = "foo" + mostRepeatedWord.concat("bar")
-        const modifiedText = uploadedFileContent.replaceAll(mostRepeatedWord, renameWord)
+        // rename and replace the text 
+        //console.log("What is the most repeated word?" + mostRepeatedWord)
+        let modifiedText = ''
+        if (mostRepeatedWord != '') {
+            const renameWord = "foo" + mostRepeatedWord.concat("bar")
+            modifiedText = uploadedFileContent.replaceAll(mostRepeatedWord, renameWord)
+        }
+        
   
-  res.json(modifiedText)   
+  res.send(modifiedText)   
   })
