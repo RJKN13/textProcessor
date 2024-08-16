@@ -31,8 +31,7 @@ server.post('/api/process-text', async (req, res) => {
    
     // word count for every occurrence
     const wordCount = {};
-    for (const word of cleanedArray) {
-        //console.log(word)
+    for (const word of cleanedArray) {        
         if (word) { 
             wordCount[word] = (wordCount[word] || 0) + 1;
         }
@@ -58,9 +57,9 @@ server.post('/api/process-text', async (req, res) => {
             if (modifiedText == '') {
                 modifiedText = uploadedFileContent
             }
-        console.log (mostRepeatedWords[index],maxCount) 
+        console.log ("The word '"+mostRepeatedWords[index]+ "' has appeared "+maxCount+ " times") 
         const renameWord = "foo" + mostRepeatedWords[index].concat("bar")
-        modifiedText = modifiedText.replaceAll(mostRepeatedWords[index], renameWord)    
+        modifiedText = modifiedText.replaceAll(new RegExp("\\b"+mostRepeatedWords[index]+"\\b", 'g'), renameWord)    
         }        
     }   
   

@@ -14,6 +14,12 @@
     <br><br>
     <button type="submit" onclick="submitForm(event)">Submit</button>
   </form>
+  <h2>originalContent</h2>
+  <div id="originalContent" style="display: none;">  
+  </div>
+  <h2>processedContent</h2>
+  <div id="processedContent" style="display: none;">    
+  </div>
 
   <script>
     function submitForm(event) {
@@ -42,22 +48,30 @@
             .then(data => {
               if(data == ''){
                 alert ("File is empty!")
-              } else {
-                alert(data);
+              } else {                
+                var text = document.getElementById("processedContent");
+                text.innerHTML = data
+                text.style.display = "block";
               }               
             })
             .catch(error => {
               console.error('Error:', error);
               alert('An error occurred while uploading the file.');
             });
+          var text = document.getElementById("originalContent");
+          text.innerHTML = fileContent
+          text.style.display = "block";
         };
 
         // read the content of the uploaded file as text
         reader.readAsText(file);
+       
       } else {
         alert('Please select a file.');
       }
+       
     }
+   
   </script>
 </body>
 </html>
