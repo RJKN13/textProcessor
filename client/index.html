@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+</head>
+
+<body>
+  <h1>Upload a Document</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" accept=".txt,.pdf,.docx,.doc,.xlsx,.xls,.pptx,.ppt" required>
+    <br><br>
+    <button type="submit" onclick="submitForm(event)">Submit</button>
+  </form>
+
+  <script>
+    function submitForm(event) {
+      event.preventDefault(); 
+
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        // callback function after reading the file
+        reader.onload = function (e) {
+          const fileContent = e.target.result;
+          alert(fileContent)
+          const data =  {
+            text: fileContent
+          }
+          // calling the REST api to process the file content
+          fetch('http://localhost:3000/api/process-text', {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },           
+            body: JSON.stringify(data)
+          })
+            .then(response => response.text())
+            .then(data => {
+              alert(data); 
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('An error occurred while uploading the file.');
+            });
+        };
+
+        // read the content of the uploaded file as text
+        reader.readAsText(file);
+      } else {
+        alert('Please select a file.');
+      }
+    }
+  </script>
+</body>
+</html>

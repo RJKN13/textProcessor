@@ -5,6 +5,13 @@ const port = 3000
 
 // express now includes a built-in JSON body parser
 server.use(express.json())
+
+server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); 
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
    
 // Start the server
 server.listen(port, () => {
@@ -12,7 +19,8 @@ server.listen(port, () => {
 })
 
 server.post('/api/process-text', async (req, res) => {
-  const uploadedFileContent = req.body.text
+  //console.log(req.body)
+    const uploadedFileContent = req.body.text
   
         // change the text to lowercase & replace special characters
         const words = uploadedFileContent
